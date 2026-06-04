@@ -36,7 +36,7 @@ class DiscoveryClient {
         if (isRunning) return
         isRunning = true
 
-        Thread({
+        Thread {
             try {
                 val group = InetAddress.getByName(MULTICAST_ADDR)
                 socket = DatagramSocket(MULTICAST_PORT).apply {
@@ -91,7 +91,7 @@ class DiscoveryClient {
      * 手动发送发现请求（当自动发现不生效时）
      */
     fun sendDiscoveryRequest() {
-        Thread({
+        Thread {
             try {
                 val message = "${DISCOVERY_PREFIX}|QUERY"
                 val packet = DatagramPacket(
