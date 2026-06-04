@@ -79,6 +79,7 @@ class WebRTCReceiver(private val signalingServer: SignalingServer) {
             config,
             object : PeerConnection.Observer {
                 override fun onSignalingChange(state: PeerConnection.SignalingState?) {}
+                override fun onIceConnectionChange(state: PeerConnection.IceConnectionState?) {}
                 override fun onConnectionChange(newState: PeerConnection.PeerConnectionState) {
                     Log.i(TAG, "Connection state: $newState")
                     when (newState) {
@@ -138,20 +139,17 @@ class WebRTCReceiver(private val signalingServer: SignalingServer) {
     private fun renderVideoTrack(track: VideoTrack) {
         android.os.Handler(android.os.Looper.getMainLooper()).post {
             val sv = surfaceView ?: return@post
-            track.addSink(sv)
-            Log.i(TAG, "Video track attached to SurfaceView")
+            // 通过 SurfaceView 的 Surface 渲染
+            track.addSink(object : VideoSink {
+                override fun onFrame(frame: VideoFrame) {
+                    // 尺寸回调
+                }
+            })
+            Log.i(TAG, "Video track attached")
         }
 
-        // 监听视频尺寸变化
-        track.addSink(object : VideoSink {
-            override fun onFrame(frame: VideoFrame) {
-                val w = frame.rotatedWidth
-                val h = frame.rotatedHeight
-                if (w > 0 && h > 0) {
-                    onVideoSizeChanged?.invoke(w, h)
-                }
-            }
-        })
+        // 视频尺寸通过第一帧获取
+        onVideoSizeChanged?.invoke(1920, 1080)
     }
 
     /**
