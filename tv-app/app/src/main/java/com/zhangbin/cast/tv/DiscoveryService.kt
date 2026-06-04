@@ -76,7 +76,7 @@ class DiscoveryService : Service() {
 
     private fun startUdpBroadcast() {
         isRunning = true
-        broadcastThread = Thread {
+        val t = Thread {
             try {
                 val message = "ZHANGBIN_CAST|$DEVICE_NAME|$SIGNALING_PORT|1.0"
                 val data = message.toByteArray()
@@ -103,7 +103,11 @@ class DiscoveryService : Service() {
             } catch (e: Exception) {
                 Log.e(TAG, "Broadcast thread error", e)
             }
-        }.apply { name = "udp-broadcast"; isDaemon = true }.start()
+        }
+        t.name = "udp-broadcast"
+        t.isDaemon = true
+        t.start()
+        broadcastThread = t
 
         Log.i(TAG, "UDP broadcast started on $MULTICAST_ADDR:$MULTICAST_PORT")
     }
