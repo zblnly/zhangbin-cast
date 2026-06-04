@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import java.net.NetworkInterface
 
 /**
  * TV 端主界面 — 全屏显示接收到的投屏画面
