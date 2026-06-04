@@ -13,8 +13,6 @@
 
     <application
         android:allowBackup="true"
-        android:banner="@drawable/tv_banner"
-        android:icon="@mipmap/ic_launcher"
         android:label="张斌的手机投屏"
         android:supportsRtl="true"
         android:theme="@style/Theme.ZhangbinCastTV"
