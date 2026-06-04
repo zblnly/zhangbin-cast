@@ -71,6 +71,7 @@ class WebRTCManager(
                     object : PeerConnection.Observer {
                         override fun onSignalingChange(state: PeerConnection.SignalingState) {}
                         override fun onIceConnectionChange(state: PeerConnection.IceConnectionState) {}
+                        override fun onIceConnectionReceivingChange(receiving: Boolean) {}
                         override fun onConnectionChange(newState: PeerConnection.PeerConnectionState) {
                             Log.i(TAG, "Connection state: $newState")
                             when (newState) {
