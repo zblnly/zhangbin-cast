@@ -76,7 +76,7 @@ class DiscoveryService : Service() {
 
     private fun startUdpBroadcast() {
         isRunning = true
-        broadcastThread = Thread("udp-broadcast") {
+        broadcastThread = Thread(name = "udp-broadcast") {
             try {
                 val message = "ZHANGBIN_CAST|$DEVICE_NAME|$SIGNALING_PORT|1.0"
                 val data = message.toByteArray()
