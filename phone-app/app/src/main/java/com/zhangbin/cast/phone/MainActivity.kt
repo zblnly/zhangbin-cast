@@ -48,6 +48,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(com.zhangbin.cast.phone.R.layout.activity_main)
 
+        // 注册全局崩溃捕获
+        CrashHandler.init(this)
+        // 显示上次闪退原因
+        CrashHandler.getLastCrash(this)?.let { crashLog ->
+            android.app.AlertDialog.Builder(this)
+                .setTitle("⚠️ 上次运行时闪退了")
+                .setMessage(crashLog)
+                .setPositiveButton("复制并发送") { _, _ ->
+                    val clipboard = getSystemService(CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                    clipboard.setPrimaryClip(android.content.ClipData.newPlainText("crash", crashLog))
+                }
+                .setNegativeButton("忽略", null)
+                .show()
+        }
+
         statusText = findViewById(com.zhangbin.cast.phone.R.id.statusText)
         deviceListText = findViewById(com.zhangbin.cast.phone.R.id.deviceListText)
         startButton = findViewById(com.zhangbin.cast.phone.R.id.startButton)
