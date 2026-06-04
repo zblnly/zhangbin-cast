@@ -37,7 +37,7 @@ class SignalingServer(private val port: Int = 9090) {
         if (isRunning) return
         isRunning = true
 
-        Thread(name = "signaling-server") {
+        Thread {
             try {
                 val serverSocket = java.net.ServerSocket(port)
                 server = serverSocket
@@ -57,7 +57,7 @@ class SignalingServer(private val port: Int = 9090) {
             } catch (e: Exception) {
                 Log.e(TAG, "Server start failed", e)
             }
-        }.apply { isDaemon = true }.start()
+        }.apply { name = "signaling-server"; isDaemon = true }.start()
     }
 
     /**
@@ -67,7 +67,7 @@ class SignalingServer(private val port: Int = 9090) {
      * 消息格式: JSON <-> 手机端
      */
     private fun handleClient(socket: java.net.Socket) {
-        Thread(name = "ws-client-${socket.inetAddress.hostAddress}") {
+        Thread {
             try {
                 val reader = socket.getInputStream().bufferedReader()
                 val writer = socket.getOutputStream().bufferedWriter()
@@ -127,7 +127,7 @@ class SignalingServer(private val port: Int = 9090) {
                 try { socket.close() } catch (_: Exception) {}
                 runOnUiThread { onClientDisconnected?.invoke() }
             }
-        }.apply { isDaemon = true }.start()
+        }.apply { name = "ws-client-${socket.inetAddress.hostAddress}"; isDaemon = true }.start()
     }
 
     private fun handleMessage(text: String) {
