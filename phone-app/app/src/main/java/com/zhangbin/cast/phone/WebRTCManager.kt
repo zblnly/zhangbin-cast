@@ -143,7 +143,7 @@ class WebRTCManager(
                         surfaceTextureHelper: SurfaceTextureHelper?,
                         context: android.content.Context?,
                         capturerObserver: CapturerObserver?
-                    ) = true
+                    ) {}
 
                     override fun startCapture(width: Int, height: Int, framerate: Int) {
                         // 由 ScreenCaptureService 通过 Surface 推送帧
