@@ -78,6 +78,7 @@ class WebRTCReceiver(private val signalingServer: SignalingServer) {
         peerConnection = peerConnectionFactory?.createPeerConnection(
             config,
             object : PeerConnection.Observer {
+                override fun onSignalingChange(state: PeerConnection.SignalingState?) {}
                 override fun onConnectionChange(newState: PeerConnection.PeerConnectionState) {
                     Log.i(TAG, "Connection state: $newState")
                     when (newState) {
@@ -127,10 +128,6 @@ class WebRTCReceiver(private val signalingServer: SignalingServer) {
 
                 override fun onDataChannel(channel: DataChannel) {}
 
-                @Deprecated("Use onAddTrack")
-                override fun onAddStreamDeprecated(stream: MediaStream?) {}
-                @Deprecated("Use onRemoveTrack")
-                override fun onRemoveStreamDeprecated(stream: MediaStream?) {}
             }
         )
     }
