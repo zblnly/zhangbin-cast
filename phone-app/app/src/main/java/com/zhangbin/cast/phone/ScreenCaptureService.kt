@@ -28,6 +28,9 @@ class ScreenCaptureService : Service() {
         private const val CHANNEL_ID = "screen_capture"
         private const val VIRTUAL_DISPLAY_NAME = "ZhangbinCastCapture"
 
+        /** 静态传递 SurfaceTexture（Parcelable 不支持直接传） */
+        var pendingSurfaceTexture: SurfaceTexture? = null
+
         /** 启动服务 */
         fun start(
             context: Context,
@@ -36,16 +39,17 @@ class ScreenCaptureService : Service() {
             surfaceTexture: SurfaceTexture,
             callback: (Surface) -> Unit
         ) {
+            pendingSurfaceTexture = surfaceTexture
             val intent = Intent(context, ScreenCaptureService::class.java).apply {
                 putExtra("resultCode", resultCode)
                 putExtra("data", data)
-                putExtra("surfaceTexture", surfaceTexture as android.os.Parcelable)
             }
             context.startForegroundService(intent)
         }
 
         /** 停止服务 */
         fun stop(context: Context) {
+            pendingSurfaceTexture = null
             context.stopService(Intent(context, ScreenCaptureService::class.java))
         }
     }
@@ -63,7 +67,7 @@ class ScreenCaptureService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val resultCode = intent?.getIntExtra("resultCode", -1) ?: -1
         val data = intent?.getParcelableExtra<Intent>("data")
-        val surfaceTexture = intent?.getParcelableExtra<SurfaceTexture>("surfaceTexture")
+        val surfaceTexture = companion.pendingSurfaceTexture
 
         if (resultCode != -1 && data != null && surfaceTexture != null) {
             startCapture(resultCode, data, surfaceTexture)
