@@ -37,7 +37,7 @@ class SignalingServer(private val port: Int = 9090) {
         if (isRunning) return
         isRunning = true
 
-        Thread("signaling-server") {
+        Thread(name = "signaling-server") {
             try {
                 val serverSocket = java.net.ServerSocket(port)
                 server = serverSocket
@@ -67,7 +67,7 @@ class SignalingServer(private val port: Int = 9090) {
      * 消息格式: JSON <-> 手机端
      */
     private fun handleClient(socket: java.net.Socket) {
-        Thread("ws-client-${socket.inetAddress.hostAddress}") {
+        Thread(name = "ws-client-${socket.inetAddress.hostAddress}") {
             try {
                 val reader = socket.getInputStream().bufferedReader()
                 val writer = socket.getOutputStream().bufferedWriter()
