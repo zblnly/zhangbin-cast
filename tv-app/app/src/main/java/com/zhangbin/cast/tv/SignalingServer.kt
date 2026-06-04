@@ -7,6 +7,8 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.webrtc.IceCandidate
 import org.webrtc.SessionDescription
 import org.json.JSONObject
+import java.net.ServerSocket
+import java.security.MessageDigest
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -205,7 +207,6 @@ class SignalingServer(private val port: Int = 9090) {
 
     private fun generateAcceptKey(key: String): String {
         val magic = "258EAFA5-E914-47DA-95CA-5AB5DC11B735"
-        import java.security.MessageDigest
         val digest = MessageDigest.getInstance("SHA-1").digest((key + magic).toByteArray())
         return java.util.Base64.getEncoder().encodeToString(digest)
     }
