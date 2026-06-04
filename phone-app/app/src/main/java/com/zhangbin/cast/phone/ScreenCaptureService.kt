@@ -67,7 +67,7 @@ class ScreenCaptureService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val resultCode = intent?.getIntExtra("resultCode", -1) ?: -1
         val data = intent?.getParcelableExtra<Intent>("data")
-        val surfaceTexture = companion.pendingSurfaceTexture
+        val surfaceTexture = ScreenCaptureService.pendingSurfaceTexture
 
         if (resultCode != -1 && data != null && surfaceTexture != null) {
             startCapture(resultCode, data, surfaceTexture)
