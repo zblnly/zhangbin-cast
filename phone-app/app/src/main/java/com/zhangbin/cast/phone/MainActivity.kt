@@ -215,7 +215,7 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         stopCasting()
         discoveryClient.stopDiscovery()
-        surfaceTextureHelper?.dispose()
+        surfaceTextureHelper?.release()
         eglBase?.dispose()
         super.onDestroy()
     }
